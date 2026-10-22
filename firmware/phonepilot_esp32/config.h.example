@@ -1,0 +1,16 @@
+// Copy to config.h and fill in your network. config.h is gitignored.
+#define WIFI_SSID "your-network"
+#define WIFI_PASSWORD "your-password"
+
+// Long random string. Must match PHONEPILOT_TOKEN on the fleet manager.
+#define API_TOKEN "change-me-to-a-long-random-string"
+
+// Shown in the iPhone Bluetooth list and on the setup page.
+#define DEVICE_NAME "PhonePilot"
+
+// Button to GND on this pin. Short press arms approval, long press panics.
+#define BUTTON_PIN 0
+#define LED_PIN 2
+
+// Used only when the configured Wi-Fi network is unavailable.
+#define AP_FALLBACK_PASSWORD "phonepilot"
