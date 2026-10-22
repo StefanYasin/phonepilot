@@ -1,0 +1,36 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Local runtime state
+*.db
+*.db-journal
+*.sqlite3
+.phonepilot/
+media/queue/*.jpg
+media/queue/*.jpeg
+media/queue/*.png
+!phonepilot/templates/media/queue/*.png
+!media/queue/.gitkeep
+
+# Firmware build output
+firmware/build/
+firmware/.pio/
+*.bin
+*.elf
+secrets.h
+config.h
+
+# Editors and OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

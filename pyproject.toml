@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "phonepilot"
+version = "0.1.0"
+description = "Local control plane for ESP32 driven iPhone automation with reviewable workflow templates"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Stefan Yasin" }]
+keywords = ["esp32", "ios", "shortcuts", "automation", "ble-hid"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+]
+dependencies = ["PyYAML>=6.0"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "ruff>=0.6"]
+
+[project.scripts]
+phonepilot = "phonepilot.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["phonepilot*"]
+
+[tool.setuptools.package-data]
+phonepilot = ["templates/*.yaml", "templates/media/queue/*"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
