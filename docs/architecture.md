@@ -118,7 +118,7 @@ but it depends on focus and layout. Prefer a Shortcut when one exists.
 | `headers` | no | String to string mapping. |
 | `json` | no | Serialized as the JSON body. Mutually exclusive with `body`. |
 | `body` | no | Raw string body. |
-| `expect_status` | no | Integer or list. Default 200, 201, 202, 204. |
+| `expect_status` | no | Integer or list, 100 to 599. Default 200, 201, 202, 204. An expected error status is returned, not raised. |
 | `timeout_s` | no | 1 to 300. Default from `defaults.timeout_s`, else 20. |
 
 The response is stored on the step as `status`, `json`, and `text`, which later

@@ -329,3 +329,23 @@ def test_failed_run_records_error(registry, fleet):
     stored = registry.get_run(result.run_id)
     assert stored["status"] == "failed"
     assert "mock failure" in stored["error"]
+
+
+def test_api_call_can_expect_an_error_status(registry, fleet, board):
+    transport = MockTransport()
+    workflow = make_workflow(
+        [
+            {
+                "id": "probe",
+                "type": "api_call",
+                "url": board.base + "/missing",
+                "expect_status": 404,
+            },
+            {"id": "use", "type": "send_keys", "text": "{{ steps.probe.json.error }}"},
+        ]
+    )
+    result = run_with(registry, workflow, transport=transport)
+
+    assert result.status == "success", result.error
+    assert result.steps[0].output["status"] == 404
+    assert transport.calls[-1][1]["text"] == "no such endpoint"

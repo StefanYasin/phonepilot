@@ -55,11 +55,13 @@ def http_request(
     json_body: Any = None,
     body: str | None = None,
     timeout: float = DEFAULT_TIMEOUT,
+    allow_status: set[int] | None = None,
 ) -> dict[str, Any]:
     """Perform one HTTP request and decode the response.
 
     Returns ``{"status": int, "json": Any|None, "text": str, "headers": dict}``.
-    Raises TransportError on connection failure, timeout, or HTTP >= 400.
+    Raises TransportError on connection failure, timeout, or HTTP >= 400 unless
+    the status is listed in ``allow_status``.
     """
     data: bytes | None = None
     request_headers = {"Accept": "application/json", **(headers or {})}
@@ -79,7 +81,16 @@ def http_request(
             content_type = response.headers.get("Content-Type", "")
             response_headers = dict(response.headers.items())
     except urllib.error.HTTPError as exc:
-        detail = exc.read().decode("utf-8", errors="replace")[:300]
+        raw = exc.read()
+        if allow_status and exc.code in allow_status:
+            decoded = _decode(raw, exc.headers.get("Content-Type", ""))
+            return {
+                "status": exc.code,
+                "json": decoded,
+                "text": raw.decode("utf-8", errors="replace"),
+                "headers": dict(exc.headers.items()),
+            }
+        detail = raw.decode("utf-8", errors="replace")[:300]
         raise TransportError(
             f"{method.upper()} {url} returned HTTP {exc.code}: {detail}"
         ) from exc

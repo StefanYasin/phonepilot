@@ -17,7 +17,7 @@ This is v0.1.0, a working vertical slice:
 
 - Python control plane with a tested workflow engine, template validator,
   device registry, autorun scheduler, and LLM drafting.
-- 101 tests, including end to end runs against a local HTTP server that speaks
+- 102 tests, including end to end runs against a local HTTP server that speaks
   the firmware API.
 - ESP32 sketch for a classic ESP32 with BLE HID, a button, and the same HTTP
   API. The sketch has not been compiled or flashed on physical hardware in this
@@ -216,7 +216,7 @@ python -m pytest -q
 python -m ruff check phonepilot tests
 ```
 
-101 tests cover template validation and the policy rails, the engine and
+102 tests cover template validation and the policy rails, the engine and
 confirmation path, SQLite storage, scheduling, transport against a real local
 HTTP server, the CLI, and LLM draft validation.
 

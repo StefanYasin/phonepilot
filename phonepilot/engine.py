@@ -358,6 +358,7 @@ class Runner:
                     json_body=params.get("json"),
                     body=params.get("body"),
                     timeout=timeout,
+                    allow_status=set(expected),
                 )
             except TransportError as exc:
                 raise StepError(str(exc)) from exc
