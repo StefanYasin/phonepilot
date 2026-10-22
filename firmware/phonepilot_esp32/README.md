@@ -38,7 +38,7 @@ All routes require `X-PhonePilot-Token` when `API_TOKEN` is set.
 |---|---|---|
 | GET | `/api/v1/status` | firmware, BLE state, queue length, approval state |
 | GET | `/api/v1/queue` | queued jobs |
-| GET | `/api/v1/next` | take the next job for the phone Shortcut |
+| GET | `/api/v1/next` | take the next job; shortcut jobs are one shot and removed when taken |
 | POST | `/api/v1/result` | report a job as posted, done or failed |
 | POST | `/api/v1/keys` | type text over BLE HID |
 | POST | `/api/v1/shortcut` | queue a named Shortcut for the phone |

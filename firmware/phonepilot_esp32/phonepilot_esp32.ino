@@ -230,9 +230,13 @@ void handleNext() {
   doc["approved"] = approvalArmed();
   for (int i = 0; i < MAX_JOBS; i++) {
     if (jobs[i].id != 0 && !jobs[i].delivered) {
+      bool one_shot = jobs[i].type == "shortcut";
       jobs[i].delivered = true;
       JsonObject job = doc["job"].to<JsonObject>();
       jobToJson(jobs[i], job, true);
+      if (one_shot) {
+        jobs[i] = Job();  // shortcut jobs have no result to wait for
+      }
       sendJson(200, doc);
       return;
     }

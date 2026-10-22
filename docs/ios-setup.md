@@ -115,7 +115,9 @@ Put the next actions under the matching menu item.
    - Turn off `Show in Share Sheet`.
 
 This is how a workflow's `trigger_shortcut` step reaches any Shortcut you have.
-No URL scheme typing, no guessing which app has focus.
+No URL scheme typing, no guessing which app has focus. Shortcut jobs are one
+shot: the board removes one as soon as it hands it over, so this branch does not
+report a result. Social post jobs stay in the queue until you report back.
 
 ### 4.4 The `social_post` branch
 

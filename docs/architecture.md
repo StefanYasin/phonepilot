@@ -214,7 +214,7 @@ not created, and `next_run` still advances.
 |---|---|---|---|
 | GET | `/api/v1/status` | | firmware, BLE, queue, approval |
 | GET | `/api/v1/queue` | | all jobs |
-| GET | `/api/v1/next` | | take the next undelivered job |
+| GET | `/api/v1/next` | | take the next undelivered job; shortcut jobs are removed immediately |
 | POST | `/api/v1/result` | `job_id`, `status`, `detail` | report back |
 | POST | `/api/v1/keys` | `text`, `enter`, `delay_ms` | BLE HID typing |
 | POST | `/api/v1/shortcut` | `name` | queue a Shortcut job |
