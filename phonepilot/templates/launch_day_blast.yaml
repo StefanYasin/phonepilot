@@ -1,0 +1,31 @@
+# Two posts, two confirmations. Nothing leaves the phone until you say yes to
+# each one, and the phone Shortcut asks again before it opens the composer.
+name: launch_day_blast
+version: 1
+description: Announce a launch on X and LinkedIn, one confirmed post at a time.
+tags:
+  - social
+  - launch
+device: iphone-01
+steps:
+  - id: prep
+    type: trigger_shortcut
+    shortcut: PhonePilot Launch Copy
+    wait_after: 2
+  - id: post_x
+    type: social_post
+    platform: x
+    media: media/queue/sample.png
+    caption: We shipped. PhonePilot is live today. https://stefanyasin.github.io/
+    mode: assisted
+    confirm_required: true
+  - id: breathe
+    type: wait
+    seconds: 5
+  - id: post_linkedin
+    type: social_post
+    platform: linkedin
+    media: media/queue/sample.png
+    caption: PhonePilot is live. An ESP32, an iPhone, and a workflow file you can read before it runs.
+    mode: assisted
+    confirm_required: true

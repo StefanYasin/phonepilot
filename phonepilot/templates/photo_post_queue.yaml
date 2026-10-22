@@ -1,0 +1,26 @@
+# Flagship social workflow. The Shortcut named below checks the preloaded photo
+# queue on the phone. The media path here is what the fleet
+# manager records and what the board queues for the phone to confirm.
+name: photo_post_queue
+version: 1
+description: Post the next queued photo to Instagram with a caption and a human confirmation.
+tags:
+  - social
+  - instagram
+  - queue
+device: iphone-01
+steps:
+  - id: pick_photo
+    type: trigger_shortcut
+    shortcut: PhonePilot Queue Check
+    wait_after: 2
+  - id: settle
+    type: wait
+    seconds: 1
+  - id: post_photo
+    type: social_post
+    platform: instagram
+    media: media/queue/sample.png
+    caption: New drop is live. Queued and confirmed with PhonePilot. #phonepilot
+    mode: assisted
+    confirm_required: true

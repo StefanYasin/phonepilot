@@ -1,0 +1,35 @@
+# Open a Shortcut that builds your morning briefing, then log the run to a
+# local endpoint. Replace the api_call URL with your own webhook or server.
+name: daily_briefing
+version: 1
+description: Build the morning briefing on the phone and log the run to a local endpoint.
+tags:
+  - daily
+  - personal
+defaults:
+  timeout_s: 20
+steps:
+  - id: open_briefing
+    type: trigger_shortcut
+    shortcut: PhonePilot Briefing
+    wait_after: 3
+  - id: announce
+    type: send_keys
+    text: briefing ready
+    enter: true
+  - id: settle
+    type: wait
+    seconds: 2
+  - id: log_run
+    type: api_call
+    method: POST
+    url: http://127.0.0.1:8787/briefing
+    json:
+      event: daily_briefing
+      run: "{{ run.id }}"
+      device: "{{ run.device }}"
+    expect_status:
+      - 200
+      - 201
+      - 202
+      - 204
