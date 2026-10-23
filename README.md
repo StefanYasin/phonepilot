@@ -13,15 +13,16 @@ a queued photo to a composer, and stop for a yes before anything is published.
 
 ## Status
 
-This is v0.1.0, a working vertical slice:
+This is v0.1.1, a working vertical slice:
 
 - Python control plane with a tested workflow engine, template validator,
   device registry, autorun scheduler, and LLM drafting.
 - 102 tests, including end to end runs against a local HTTP server that speaks
   the firmware API.
-- ESP32 sketch for a classic ESP32 with BLE HID, a button, and the same HTTP
-  API. The sketch has not been compiled or flashed on physical hardware in this
-  release. Treat the first flash as bring-up.
+- ESP32 sketch with BLE HID, a button, and the same HTTP API. It compiles
+  clean for `esp32:esp32:esp32` on core 3.3.12 (1.24 MB flash, 61 KB static
+  RAM). It has not been flashed on physical hardware yet, so treat the first
+  flash as bring-up.
 - Three example templates, including a confirmed Instagram photo queue.
 
 What is not here yet: a packaged `.shortcut` file, direct platform APIs, image
@@ -63,7 +64,7 @@ Why this shape:
 
 | Part | Notes |
 |---|---|
-| ESP32 dev board | Classic ESP32 with BLE. ESP32-S3 works if your BLE keyboard library build supports it. |
+| ESP32 dev board | Classic ESP32 with BLE. S3, C3 and C6 work too. S2 and P4 have no Bluetooth. |
 | Momentary button | GPIO 0 to GND. The BOOT button works for a first test. |
 | LED | GPIO 2 with a 220 ohm resistor. Optional. |
 | iPhone | iOS 16 or later. iOS 17 or later recommended for Shortcuts features. |
@@ -83,11 +84,15 @@ pip install -e ".[dev]"
 phonepilot init
 ```
 
-Flash the board:
+### Firmware
+
+The board needs core 3.3.12, `HijelHID_BLEKeyboard` 0.5.0 (which pulls
+`NimBLE-Arduino` 2.5.1), and `ArduinoJson` 7.4.2. Full detail and the wiring
+table are in [firmware/phonepilot_esp32/README.md](firmware/phonepilot_esp32/README.md).
 
 ```bash
 arduino-cli core install esp32:esp32
-arduino-cli lib install "ESP32-BLE-Keyboard" "ArduinoJson"
+arduino-cli lib install "HijelHID_BLEKeyboard@0.5.0" "ArduinoJson@7.4.2"
 cp firmware/phonepilot_esp32/config.h.example firmware/phonepilot_esp32/config.h
 # edit Wi-Fi, API_TOKEN and pins, then:
 arduino-cli compile --fqbn esp32:esp32:esp32 firmware/phonepilot_esp32
@@ -240,8 +245,8 @@ tests/                 101 pytest tests
 
 ## Deferred
 
-- Flashing and running the sketch on a physical board. The API is tested, the
-  hardware is not.
+- Flashing and running the sketch on a physical board. The firmware compiles
+  and the API is tested, the hardware bring-up is not done.
 - A ready made `.shortcut` file. The setup document describes the Shortcut,
   building it takes about ten minutes.
 - Direct posting through platform APIs for business accounts.
@@ -259,9 +264,13 @@ implementation and no source code was copied. The approach here is different:
 no AirPlay, no vision model, Shortcuts for app actions, and a Python control
 plane built around reviewable templates.
 
-The firmware uses [ESP32-BLE-Keyboard](https://github.com/T-vK/ESP32-BLE-Keyboard),
+The firmware uses
+[HijelHID_BLEKeyboard](https://github.com/HijelHub/HijelHID_BLEKeyboard),
+[NimBLE-Arduino](https://github.com/h2zero/NimBLE-Arduino),
 [ArduinoJson](https://arduinojson.org/), and the
-[Arduino ESP32 core](https://github.com/espressif/arduino-esp32).
+[Arduino ESP32 core](https://github.com/espressif/arduino-esp32). It used
+[ESP32-BLE-Keyboard](https://github.com/T-vK/ESP32-BLE-Keyboard) up to v0.1.0;
+that library no longer builds against core 3.3.12.
 
 MIT licensed. See [LICENSE](LICENSE).
 

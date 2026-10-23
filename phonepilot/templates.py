@@ -273,7 +273,7 @@ def _parse_step(
             problems.append(f"steps[{step_id}]: caption must be a non-empty string")
         mode = params.get("mode", "assisted")
         if mode != "assisted":
-            problems.append(f"steps[{step_id}]: mode must be assisted in v0.1.0")
+            problems.append(f"steps[{step_id}]: mode must be assisted in v0.1.x")
         confirm = params.get("confirm_required", True)
         if confirm is not True:
             problems.append(

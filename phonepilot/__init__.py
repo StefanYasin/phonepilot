@@ -5,4 +5,4 @@ registry, and runs YAML workflow templates. The phone side lives in iOS
 Shortcuts; see docs/ios-setup.md.
 """
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"

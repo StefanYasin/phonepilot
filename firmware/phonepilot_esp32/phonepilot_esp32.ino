@@ -10,15 +10,16 @@
  * level action, and reports back to /api/v1/result. Nothing on this board
  * posts to a social network by itself.
  *
- * Libraries: ESP32-BLE-Keyboard, ArduinoJson 7, WebServer (bundled).
- * Board: esp32:esp32:esp32 (classic ESP32 with BLE).
+ * Libraries: HijelHID_BLEKeyboard 0.5.0 (NimBLE-Arduino 2.5.1), ArduinoJson 7,
+ * WebServer (bundled with the ESP32 core).
+ * Board: esp32:esp32:esp32 (classic ESP32 with BLE), core 3.3.12 or newer.
  */
 
 #include <Arduino.h>
 #include <WiFi.h>
 #include <WebServer.h>
 #include <ArduinoJson.h>
-#include <BleKeyboard.h>
+#include <HijelHID_BLEKeyboard.h>
 #include <ESPmDNS.h>
 
 #include "config.h"
@@ -36,11 +37,11 @@
 #define AP_FALLBACK_PASSWORD "phonepilot"
 #endif
 
-#define FIRMWARE_VERSION "0.1.0"
+#define FIRMWARE_VERSION "0.1.1"
 #define MAX_JOBS 8
 #define TEXT_LIMIT 512
 
-BleKeyboard bleKeyboard(DEVICE_NAME, "PhonePilot", 100);
+HijelHID_BLEKeyboard bleKeyboard(DEVICE_NAME, "PhonePilot", 100);
 WebServer server(80);
 
 struct Job {
@@ -166,7 +167,7 @@ void panic() {
   approval_until = 0;
   clearJobs();
   if (bleKeyboard.isConnected()) {
-    bleKeyboard.write(KEY_ESC);
+    bleKeyboard.tap(KEY_ESCAPE);
   }
   Serial.println("panic: queue cleared");
 }
@@ -183,6 +184,7 @@ void handleStatus() {
   doc["firmware"] = FIRMWARE_VERSION;
   doc["uptime_s"] = (millis() - boot_ms) / 1000;
   doc["ble_connected"] = bleKeyboard.isConnected();
+  doc["ble_paired"] = bleKeyboard.isPaired();
   doc["wifi_rssi"] = WiFi.status() == WL_CONNECTED ? WiFi.RSSI() : 0;
   doc["ip"] = WiFi.status() == WL_CONNECTED ? WiFi.localIP().toString() : WiFi.softAPIP().toString();
   doc["queue"] = 0;
@@ -300,15 +302,19 @@ void handleKeys() {
     sendError(409, "no BLE host connected");
     return;
   }
-  delay_ms = constrain(delay_ms, 0, 50);
+  // delay_ms is the per key hold and gap. The BLE HID stack needs the key to
+  // be held long enough for iOS to register it, so 15 ms is the floor.
+  uint16_t pace = (uint16_t)constrain(delay_ms, 0, 50);
+  if (pace < 15) {
+    pace = 15;
+  }
+  bleKeyboard.setTapDelay(pace);
+  bleKeyboard.setKeyGap(pace);
   for (size_t i = 0; i < strlen(text); i++) {
-    bleKeyboard.print(text[i]);
-    if (delay_ms > 0) {
-      delay(delay_ms);
-    }
+    bleKeyboard.write((uint8_t)text[i]);
   }
   if (enter) {
-    bleKeyboard.write(KEY_RETURN);
+    bleKeyboard.tap(KEY_RETURN);
   }
   JsonDocument reply;
   reply["ok"] = true;

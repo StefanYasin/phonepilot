@@ -34,8 +34,9 @@ export TOKEN='the-value-from-config.h'
 curl -s -H "X-PhonePilot-Token: $TOKEN" http://192.168.1.50/api/v1/status
 ```
 
-You should see JSON with `"ok": true`, `"firmware": "0.1.0"`, and
-`"ble_connected": false`. The last field becomes true after step 2.
+You should see JSON with `"ok": true`, `"firmware": "0.1.1"`, and
+`"ble_connected": false`. That field becomes true after step 2, and
+`"ble_paired"` becomes true once iOS has finished encrypting the link.
 
 If that fails, fix it before touching Shortcuts. Shortcuts is a bad debugger.
 
@@ -46,12 +47,13 @@ If that fails, fix it before touching Shortcuts. Shortcuts is a bad debugger.
 3. Tap `PhonePilot` under Other Devices.
 4. There is no PIN. The board is a keyboard, and iOS pairs it as one.
 
-Verify with `curl` again. `"ble_connected"` should now be true.
+Verify with `curl` again. `"ble_connected"` and `"ble_paired"` should now be
+true.
 
 If `PhonePilot` never appears:
 
-- Confirm the sketch uses `BleKeyboard` and that the board has BLE. A plain
-  ESP32 does. Some ESP32 variants with only Bluetooth Classic do not.
+- Confirm the sketch uses `HijelHID_BLEKeyboard` and that the board has BLE.
+  A plain ESP32 does. The ESP32-S2 and ESP32-P4 do not.
 - Open the serial monitor. The sketch prints a waiting message every 30 seconds.
 - Remove any old pairing on the phone and reboot the board.
 
@@ -178,7 +180,7 @@ share sheet, let you tap Post.
 
 If you manage a business account with Graph API access, you can put that call
 in an `api_call` step in the workflow and skip this branch. That is outside
-v0.1.0.
+v0.1.x.
 
 ### 4.5 Optional: drain more than one job
 
@@ -251,7 +253,7 @@ iPhone`.
 - Long press, 1.2 seconds or more: clears the queue, disarms approval, sends
   Escape to the phone.
 
-The approval flag is informational in v0.1.0. `PhonePilot Sync` still shows its
+The approval flag is informational in v0.1.x. `PhonePilot Sync` still shows its
 menu unless you edit it. That is intentional: a physical button is convenient,
 not a substitute for reading the caption you are about to publish.
 

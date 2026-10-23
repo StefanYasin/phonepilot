@@ -56,7 +56,7 @@ def check_policy(workflow: Any) -> list[str]:
             mode = step.params.get("mode", "assisted")
             if mode != "assisted":
                 problems.append(
-                    f"{label}: mode {mode!r} is not supported in v0.1.0; "
+                    f"{label}: mode {mode!r} is not supported in v0.1.x; "
                     "use assisted posting through the phone Shortcut"
                 )
     return problems

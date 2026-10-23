@@ -131,7 +131,7 @@ steps can read through interpolation. Dry runs do not perform the request.
 | `platform` | yes | instagram, tiktok, x, linkedin, facebook, threads, youtube, pinterest, custom. |
 | `media` | yes | Path to a photo or video. Relative paths resolve next to the template, then the cwd. |
 | `caption` | yes | Plain text. |
-| `mode` | no | Only `assisted` in v0.1.0. |
+| `mode` | no | Only `assisted` in v0.1.x. |
 | `confirm_required` | yes, effectively | Must be `true`. Anything else is a validation error. |
 | `target` | no | Passed through for a profile, page, or album name. |
 

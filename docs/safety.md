@@ -57,7 +57,7 @@ The validator refuses templates containing:
 - `retry_on_429`
 - `retry_on` with HTTP 403 or 429
 - `social_post` with `confirm_required: false`
-- `social_post` with `mode: api` in v0.1.0
+- `social_post` with `mode: api` in v0.1.x
 
 These are mechanical checks, not a moral guarantee. You can edit the source.
 The point is that the default path makes the honest choice, and the dishonest
